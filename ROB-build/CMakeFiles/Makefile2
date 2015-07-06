@@ -165,8 +165,8 @@ clean: CMakeFiles/MrsvrIF.dir/clean
 
 # All Build rule for target.
 CMakeFiles/controller.dir/all: CMakeFiles/fbisim.dir/all
-CMakeFiles/controller.dir/all: CMakeFiles/MrsvrCtrl.dir/all
 CMakeFiles/controller.dir/all: CMakeFiles/MrsvrCom.dir/all
+CMakeFiles/controller.dir/all: CMakeFiles/MrsvrCtrl.dir/all
 	$(MAKE) -f CMakeFiles/controller.dir/build.make CMakeFiles/controller.dir/depend
 	$(MAKE) -f CMakeFiles/controller.dir/build.make CMakeFiles/controller.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/yuting/Desktop/MTest/ROB-build/CMakeFiles  41
@@ -236,8 +236,8 @@ clean: CMakeFiles/fbisim.dir/clean
 # Target rules for target CMakeFiles/interface.dir
 
 # All Build rule for target.
-CMakeFiles/interface.dir/all: CMakeFiles/MrsvrIF.dir/all
 CMakeFiles/interface.dir/all: CMakeFiles/MrsvrCom.dir/all
+CMakeFiles/interface.dir/all: CMakeFiles/MrsvrIF.dir/all
 	$(MAKE) -f CMakeFiles/interface.dir/build.make CMakeFiles/interface.dir/depend
 	$(MAKE) -f CMakeFiles/interface.dir/build.make CMakeFiles/interface.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/yuting/Desktop/MTest/ROB-build/CMakeFiles  45
