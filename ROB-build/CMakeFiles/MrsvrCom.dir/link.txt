@@ -1,0 +1,2 @@
+/usr/bin/ar cr libMrsvrCom.a  CMakeFiles/MrsvrCom.dir/MrsvrSharedData.o CMakeFiles/MrsvrCom.dir/MrsvrStatus.o CMakeFiles/MrsvrCom.dir/MrsvrCommand.o CMakeFiles/MrsvrCom.dir/MrsvrLog.o CMakeFiles/MrsvrCom.dir/MrsvrRAS.o
+/usr/bin/ranlib libMrsvrCom.a

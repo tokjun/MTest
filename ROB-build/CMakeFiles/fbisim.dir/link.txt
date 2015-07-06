@@ -1,0 +1,2 @@
+/usr/bin/ar cr libfbisim.a  CMakeFiles/fbisim.dir/fbisim/fbida_sim.o CMakeFiles/fbisim.dir/fbisim/fbidio_sim.o CMakeFiles/fbisim.dir/fbisim/fbipenc_sim.o
+/usr/bin/ranlib libfbisim.a

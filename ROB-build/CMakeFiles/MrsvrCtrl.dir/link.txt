@@ -1,0 +1,2 @@
+/usr/bin/ar cr libMrsvrCtrl.a  CMakeFiles/MrsvrCtrl.dir/MrsvrDev.o
+/usr/bin/ranlib libMrsvrCtrl.a

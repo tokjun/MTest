@@ -1,0 +1,1 @@
+/usr/bin/c++    -fPIC    CMakeFiles/MC.dir/interface.o  -o MC  -L/home/yuting/Desktop/MTest/gui/build  -L/usr/local/lib -rdynamic -lFOX-1.6 -lpthread -lm libMClib.a -Wl,-rpath,/home/yuting/Desktop/MTest/gui/build:/usr/local/lib 

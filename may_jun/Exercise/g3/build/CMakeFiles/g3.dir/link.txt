@@ -1,0 +1,1 @@
+/usr/bin/c++    -fPIC    CMakeFiles/g3.dir/interface.o CMakeFiles/g3.dir/scribble.o  -o g3  -L/home/yuting/Desktop/myTest/g3/build  -L/usr/local/lib -rdynamic -lFOX-1.6 -Wl,-rpath,/home/yuting/Desktop/myTest/g3/build:/usr/local/lib 

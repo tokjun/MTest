@@ -1,0 +1,2 @@
+/home/yuting/Desktop/MTest/gui/build/CMakeFiles/MC.dir
+/home/yuting/Desktop/MTest/gui/build/CMakeFiles/MClib.dir

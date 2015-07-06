@@ -1,0 +1,2 @@
+/home/yuting/Desktop/MTest/Olalala/build/CMakeFiles/MC.dir
+/home/yuting/Desktop/MTest/Olalala/build/CMakeFiles/MClib.dir

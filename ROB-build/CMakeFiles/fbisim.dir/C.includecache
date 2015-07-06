@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yuting/Desktop/MTest/ROB/fbisim/fbida_sim.c
+fbida_sim.h
+/home/yuting/Desktop/MTest/ROB/fbisim/fbida_sim.h
+
+/home/yuting/Desktop/MTest/ROB/fbisim/fbida_sim.h
+
+/home/yuting/Desktop/MTest/ROB/fbisim/fbidio_sim.c
+fbidio_sim.h
+/home/yuting/Desktop/MTest/ROB/fbisim/fbidio_sim.h
+
+/home/yuting/Desktop/MTest/ROB/fbisim/fbidio_sim.h
+
+/home/yuting/Desktop/MTest/ROB/fbisim/fbipenc_sim.c
+fbipenc_sim.h
+/home/yuting/Desktop/MTest/ROB/fbisim/fbipenc_sim.h
+
+/home/yuting/Desktop/MTest/ROB/fbisim/fbipenc_sim.h
+

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MSimulator</class>
+ <widget class="QMainWindow" name="MSimulator">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>571</width>
+    <height>233</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MSimulator</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>30</y>
+      <width>256</width>
+      <height>128</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="ly_output">
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="mat12"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="mat23"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="mat24"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="mat21"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="mat32"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLineEdit" name="mat11">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="mat33"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="mat13"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="mat14"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="mat31"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLineEdit" name="mat34"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="mat22"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLineEdit" name="mat41"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="mat42"/>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="mat43"/>
+     </item>
+     <item row="3" column="3">
+      <widget class="QLineEdit" name="mat44"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>241</width>
+      <height>162</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="ly_input">
+     <item>
+      <layout class="QHBoxLayout" name="ly_Server">
+       <item>
+        <widget class="QRadioButton" name="btnServer">
+         <property name="text">
+          <string>Server</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="btnClient">
+         <property name="text">
+          <string>Client</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="ly_3parameters">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lbHostname">
+         <property name="text">
+          <string>Hostname :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="leHostname">
+         <property name="placeholderText">
+          <string>localhost</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lbPort">
+         <property name="text">
+          <string>Port :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lePort">
+         <property name="placeholderText">
+          <string>18944</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lbX">
+         <property name="text">
+          <string>X :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="leX"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="ly_Submit">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="btnSubmit">
+         <property name="text">
+          <string>&amp;Submit</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnClear">
+         <property name="text">
+          <string>&amp;Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnExit">
+         <property name="text">
+          <string>&amp;Exit</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>571</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

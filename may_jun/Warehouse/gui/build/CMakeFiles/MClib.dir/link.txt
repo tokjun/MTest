@@ -1,0 +1,2 @@
+/usr/bin/ar cr libMClib.a  CMakeFiles/MClib.dir/MConnectorWindow.o
+/usr/bin/ranlib libMClib.a
