@@ -1707,16 +1707,17 @@ void MrsvrMainWindow::updateFeedBackInfo()
 {
   if (extMsgSvr != NULL) 
     {  // Message Server
-      if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_CONNECTED) 
-	{
-	  std::cerr << "cooooonnected" << std::endl;
-	  extMsgSvr->feedBackInfo();
-	}
-      else if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_WAIT) 
-	{
-	  std::cerr << "waitttttttttt" << std::endl;
-	}
-      else {std::cerr << "elseeeeeeeeeeee" << std::endl;}
+      if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_CONNECTED) {
+	std::cerr << "cooooonnected" << std::endl;
+	extMsgSvr->feedBackInfo();
+      }
+      else if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_WAIT) {
+	std::cerr << "waitttttttttt" << std::endl;
+	extMsgSvr->feedBackInfo();
+      }
+      else {
+	std::cerr << "elseeeeeeeeeeee" << std::endl;
+      }
     }
 }
 //-------------------------------------------------- end july6,ez

@@ -75,6 +75,13 @@ void GetRandomMatrix(igtl::Matrix4x4& matrix){
   
   igtl::PrintMatrix(matrix);
 }
+
+
+
+void printTargetMatrix(igtl::Matrix4x4& matrix){
+  igtl::PrintMatrix(matrix);
+}
+
 //-------------------------------------------------- end july6,ez
 
 MrsvrMessageServer::MrsvrMessageServer(int port) : MrsvrThread()
@@ -105,6 +112,7 @@ void MrsvrMessageServer::init()
 
   //-------------------------------------------------- july6,ez
   fZFrameTransform = false;
+  fTarget = false;
   //-------------------------------------------------- end july6,ez
 
 
@@ -244,18 +252,25 @@ int MrsvrMessageServer::onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::Mess
     if (strcmp(transMsg->GetDeviceName(), "TARGET") == 0 ||
         strcmp(transMsg->GetDeviceName(), "ProstateNavRobotTarg") == 0){
       setTargetMatrix(matrix);
+      
+      printTargetMatrix(matrix);
+      
       //if (result == TARGET_ACCEPTED) {
       //} else if (result == TARGET_OUT_OF_RANGE) {
       //}
+
+      //-------------------------------------------------- july7,ez
+      fTarget = true;
+      //-------------------------------------------------- end july7,ez
+
+
     } else if (strcmp(transMsg->GetDeviceName(), "ZFrameTransform") == 0){
       setCalibrationMatrix(matrix);
 
       //-------------------------------------------------- july6,ez
       fZFrameTransform = true;
       //-------------------------------------------------- end july6,ez
-
     }
-
     
     return 1;
   }
@@ -269,30 +284,39 @@ int MrsvrMessageServer::feedBackInfo()
 {
   // check connect
   if (this->connectionStatus == SVR_CONNECTED) {
-    if (fZFrameTransform == true){
-      igtl::TransformMessage::Pointer transMsg;
-      transMsg = igtl::TransformMessage::New();
-      transMsg->SetDeviceName("rcv_msg");
-      
-      igtl::TimeStamp::Pointer ts;
-      ts = igtl::TimeStamp::New();
-      
-      igtl::Matrix4x4 rcv;
-      GetRandomMatrix(rcv);
+      if (fZFrameTransform == true){  // feedback ZFrame
+        igtl::TransformMessage::Pointer feedMsg;
+        feedMsg = igtl::TransformMessage::New();
+        igtl::TimeStamp::Pointer ts;
+        ts = igtl::TimeStamp::New();
+        igtl::Matrix4x4 rcv;
+        GetRandomMatrix(rcv);
+       	feedMsg->SetDeviceName("feedZFrame");    
+	feedMsg->SetMatrix(rcv);
+	feedMsg->SetTimeStamp(ts);
+	feedMsg->Pack();  
+	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+	fZFrameTransform = false;
+      }
 
-      transMsg->SetMatrix(rcv);
-      transMsg->SetTimeStamp(ts);
-      transMsg->Pack();
-      
-      socket->Send(transMsg->GetPackPointer(), transMsg->GetPackSize());
-      
-      
-      fZFrameTransform = false;
-    }
-    else{
-    }
-  }  
-  else {std::cerr << "nooooooooooo connection!" << std::endl;}  //end "this" if
+      else if (fTarget == true) {  // feedback Target
+	igtl::TransformMessage::Pointer feedMsg;
+        feedMsg = igtl::TransformMessage::New();
+        igtl::TimeStamp::Pointer ts;
+        ts = igtl::TimeStamp::New();
+        igtl::Matrix4x4 rcv;
+        GetRandomMatrix(rcv);
+       	feedMsg->SetDeviceName("feedTarget");    
+	feedMsg->SetMatrix(rcv);
+	feedMsg->SetTimeStamp(ts);
+	feedMsg->Pack();  
+	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+	fTarget = false;	
+      }
+  } 
+  else if (this->connectionStatus == SVR_WAIT) {
+    
+  }  //end "this" if
 
 }
 //-------------------------------------------------- end july6,ez

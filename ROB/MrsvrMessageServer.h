@@ -150,6 +150,7 @@ class MrsvrMessageServer : public MrsvrThread {
 //-------------------------------------------------------------------- july6,ez
   int         feedBackInfo();
   bool        fZFrameTransform;
+  bool        fTarget;
 //-------------------------------------------------------------------- end july6,ez
 
  private:

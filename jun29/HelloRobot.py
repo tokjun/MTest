@@ -45,6 +45,30 @@ class HelloRobotWidget:
   def setup(self):
     # Instantiate and connect widgets ...
 
+    # Collapsible button - Settings
+    setCollapsibleButton = ctk.ctkCollapsibleButton()
+    setCollapsibleButton.text = "Settings"
+    self.layout.addWidget(setCollapsibleButton)
+
+    gridLayout = qt.QGridLayout(setCollapsibleButton)
+    gridLayout.setSpacing(10)
+
+    labelHostname = qt.QLabel("Hostname: ")
+    self.lineEditHostname = qt.QLineEdit()
+    labelPort = qt.QLabel("Port: ")
+    self.lineEditPort = qt.QLineEdit()
+    labelStatus = qt.QLabel("Status: ")
+    self.lineEditStatus = qt.QLineEdit()
+
+    gridLayout.addWidget(labelHostname, 1, 0)
+    gridLayout.addWidget(self.lineEditHostname, 1, 1)
+    gridLayout.addWidget(labelPort, 2, 0)
+    gridLayout.addWidget(self.lineEditPort, 2, 1)
+    gridLayout.addWidget(labelStatus, 3, 0)
+    gridLayout.addWidget(self.lineEditStatus, 3, 1)
+
+
+
     # Collapsible button
     mainCollapsibleButton = ctk.ctkCollapsibleButton()
     mainCollapsibleButton.text = "Robot!"
@@ -52,25 +76,15 @@ class HelloRobotWidget:
 
     # Layout within the sample collapsible button
     HostPortLayout = qt.QVBoxLayout(mainCollapsibleButton)
-
+   
     ########################
-    labelHostname = qt.QLabel("Hostname: ")
-    self.lineEditHostname = qt.QLineEdit()
-    labelPort = qt.QLabel("Port: ")
-    self.lineEditPort = qt.QLineEdit()
-
     buttonConnect = qt.QPushButton("Connect")
     buttonConnect.toolTip = "Print 'Hello world' in standard output."
-    buttonRegistration = qt.QPushButton("ZFrameTransform")
+    buttonRegistration = qt.QPushButton("ZFrameTransform Registration")
     buttonTarget = qt.QPushButton("find Target")
     buttonSendTarget = qt.QPushButton("send Target")
     buttonCurrent = qt.QPushButton("Current")
     buttonDisconnect = qt.QPushButton("Disconnect")
-
-    HostPortLayout.addWidget(labelHostname)
-    HostPortLayout.addWidget(self.lineEditHostname)
-    HostPortLayout.addWidget(labelPort)
-    HostPortLayout.addWidget(self.lineEditPort)
 
     HostPortLayout.addWidget(buttonConnect)
     HostPortLayout.addWidget(buttonRegistration)
@@ -146,12 +160,13 @@ class HelloRobotLogic:
     self.dataNodeTarget = slicer.vtkMRMLLinearTransformNode()
     self.dataNodeTarget.SetName('TARGET')
     slicer.mrmlScene.AddNode(self.dataNodeTarget)
-    self.connectNode.RegisterOutgoingMRMLNode(self.dataNodeTarget)
+   #self.connectNode.RegisterOutgoingMRMLNode(self.dataNodeTarget)
     '''check node status'''
 
   def buttonSendTarget(self):
     '''check whether dataNodeTarget exist'''
-    self.connectNode.PushNode(self.dataNodeTarget)
+    self.connectNode.RegisterOutgoingMRMLNode(self.dataNodeTarget)
+    self.connectNode.PushNode(self.dataNodeTarget)  # send the Target data to controller
 
   def buttonCurrent(self):
     self.dataNodeCurrent = slicer.vtkMRMLLinearTransformNode()
@@ -166,17 +181,15 @@ class HelloRobotLogic:
 #-------------------------------------------------------------------
   def activeEvent(self):
     print "into activeEvent"
-    # ceate tmpNode and add it into connectNode
     self.tempLinearNode = slicer.vtkMRMLLinearTransformNode()
     self.tempLinearNode.SetName('temp')
-    #slicer.mrmlScene.AddNode(self.tempLinearNode)
-    #self.connectNode.RegisterIncomingMRMLNode(self.tempLinearNode)
    
     #self.tagTemp = self.tempLinearNode.AddObserver('ModifiedEvent', self.putInfo)
+    self.tagTemp = self.connectNode.AddObserver('ModifiedEvent', self.putInfo)
     #self.tagTemp = self.connectNode.AddObserver(slicer.vtkMRMLIGTLConnectorNode.ReceiveEvent, self.putInfo)
     #self.tagTemp = self.tempLinearNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.putInfo)
+    #self.tagTemp = self.tempLinearNode.AddObserver(self.connectNode.ReceiveEvent, self.putInfo)
     #self.tagTemp = self.connectNode.AddObserver(self.connectNode.ReceiveEvent, self.putInfo)
-    self.tagTemp = self.connectNode.AddObserver(self.connectNode.ReceiveEvent, self.putInfo)
     
     #test
     self.times1 = 0
@@ -185,21 +198,61 @@ class HelloRobotLogic:
     self.times1 = self.times1+1
     print "********************"
     print ("into caller", self.times1)
+
+#    if caller.IsA("vtkMRMLIGTLConnectorNode"):
+#      print "caller is connect"
+#    elif caller.IsA("vtkMRMLLinearTransformNode"):
+#      print "caller is linear"
+#    else:
+#      print "else"
+
+
     if caller.IsA('vtkMRMLIGTLConnectorNode'):
+      print "temp"
+      print event
+
       #print "caller is connectNode!"
       nInNode =  caller.GetNumberOfIncomingMRMLNodes()
       #print nInNode
       for i in range(nInNode):  # start from 0
-        node = caller.GetIncomingMRMLNode(i)
+        node = caller.GetIncomingMRMLNode(i) 
+
+        if node.IsA("vtkMRMLLinearTransformNode"):
+          if node.GetName() == "feedConnect":
+            pass
+          if node.GetName() == "feedZFrame":
+            qt.QMessageBox.information(
+              slicer.util.mainWindow(),
+              "Slicer Python", "Registration OK!")
+            self.connectNode.UnregisterIncomingMRMLNode(node)
+            
+          elif node.GetName() == "feedTarget":
+            qt.QMessageBox.information(
+              slicer.util.mainWindow(),
+              "Slicer Python", "Send Target OK!")
+            self.connectNode.UnregisterIncomingMRMLNode(node)
+          else:
+            print "no feed!!!!!"
+            
+
+
+
+'''
         if node.IsA("vtkMRMLLinearTransformNode"):
           if node.GetName() == "CURRENT":
             print "current"
-          elif node.GetName() == "feedBackMsg":
-            print "feedbackmsg"
-          elif node.GetName() == "rcv_msg":
-            print "Olalalalalalala!!!!!!!!!!!!"
+          elif node.GetName() == "feedZFrame":
+            qt.QMessageBox.information(
+              slicer.util.mainWindow(),
+              'Slicer Python', 'Registration OK!'
+            )
+            print "Registration OK!!!!!"
+          elif node.GetName() == "feedTarget":
+            print "Target OK!!!!!"
           else:
             print "else"
+'''
+          
         #print i  # start from 0
         #print node.GetID()  # MRML ID
         #print node.GetNodeTagName()  # MRML Type
