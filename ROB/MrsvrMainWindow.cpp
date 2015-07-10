@@ -1703,20 +1703,24 @@ void MrsvrMainWindow::updateExternalCommands()
 
 
 //-------------------------------------------------- july6,ez
+int cTimes = 0;
+int wTimes = 0;
+int eTimes = 0;
+
 void MrsvrMainWindow::updateFeedBackInfo()
 {
   if (extMsgSvr != NULL) 
     {  // Message Server
       if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_CONNECTED) {
-	std::cerr << "cooooonnected" << std::endl;
+	std::cerr << "connect: "<< cTimes++ << std::endl;
 	extMsgSvr->feedBackInfo();
       }
       else if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_WAIT) {
-	std::cerr << "waitttttttttt" << std::endl;
+	std::cerr << "wait: " << wTimes++ << std::endl;
 	extMsgSvr->feedBackInfo();
       }
       else {
-	std::cerr << "elseeeeeeeeeeee" << std::endl;
+	std::cerr << "else: " << eTimes++ << std::endl;
       }
     }
 }

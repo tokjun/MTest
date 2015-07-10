@@ -27,6 +27,7 @@ CMakeFiles/interface.dir/interface.o
  /home/yuting/Desktop/OpenIGTLink-build/igtlTypeConfig.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlClientSocket.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlCreateObjectFunction.h
+ /home/yuting/Desktop/OpenIGTLink/Source/igtlImageMessage.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlLightObject.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlMacro.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlMath.h
@@ -36,6 +37,7 @@ CMakeFiles/interface.dir/interface.o
  /home/yuting/Desktop/OpenIGTLink/Source/igtlObject.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlObjectFactory.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlObjectFactoryBase.h
+ /home/yuting/Desktop/OpenIGTLink/Source/igtlPointMessage.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlServerSocket.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlSimpleFastMutexLock.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlSmartPointer.h

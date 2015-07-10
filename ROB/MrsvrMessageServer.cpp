@@ -89,7 +89,6 @@ MrsvrMessageServer::MrsvrMessageServer(int port) : MrsvrThread()
   this->port = port;
   init();
   pthread_mutex_init(&mtxCommand, NULL);
-
 }
 
 
@@ -162,8 +161,7 @@ void MrsvrMessageServer::process()
       
       //------------------------------------------------------------
       // loop
-      while (this->fRunServer == 1) {
-        
+      while (this->fRunServer == 1) {       
         // Initialize receive buffer
         headerMsg->InitPack();
         
@@ -181,16 +179,25 @@ void MrsvrMessageServer::process()
         // Deserialize the header
         headerMsg->Unpack();
 
+	//-------------------- july11,ez
+	std::cerr << "device type: " << headerMsg->GetDeviceType() << ", device name: " << headerMsg->GetDeviceName() << std::endl;
+ 
         // Check data type and receive data body
         if (strcmp(headerMsg->GetDeviceType(), "TRANSFORM") == 0){
           onRcvMsgMaster(socket, headerMsg);
-        } else {
+        } 
+
+	else if (strcmp(headerMsg->GetDeviceType(), "POINT") == 0){
+	  onRcvPointMsg(socket, headerMsg);
+	  feedBackInfo();
+	}
+	
+	else{
           // if the data type is unknown, skip reading.
           std::cerr << "Receiving : " << headerMsg->GetDeviceType() << std::endl;
           socket->Skip(headerMsg->GetBodySizeToRead(), 0);
         }
-      }
-      
+      }      
 
       // Change the status to "WAIT"
       socket->CloseSocket();
@@ -259,14 +266,8 @@ int MrsvrMessageServer::onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::Mess
       //} else if (result == TARGET_OUT_OF_RANGE) {
       //}
 
-      //-------------------------------------------------- july7,ez
-      fTarget = true;
-      //-------------------------------------------------- end july7,ez
-
-
     } else if (strcmp(transMsg->GetDeviceName(), "ZFrameTransform") == 0){
       setCalibrationMatrix(matrix);
-
       //-------------------------------------------------- july6,ez
       fZFrameTransform = true;
       //-------------------------------------------------- end july6,ez
@@ -277,6 +278,51 @@ int MrsvrMessageServer::onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::Mess
   
   return 0;
 }
+
+//-------------------------------------------------- july11,ez
+int MrsvrMessageServer::onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::MessageHeader::Pointer& header)
+{
+#ifdef DEBUG_MRSVR_MESSAGE_SERVER
+  fprintf(stderr, "MrsvrMessageServer::onRcvMarkupMsg():Receiving POINT data type.\n");
+#endif
+  
+  igtl::PointMessage::Pointer pointMsg;
+  pointMsg = igtl::PointMessage::New();
+  pointMsg->SetMessageHeader(header);
+  pointMsg->AllocatePack();
+  
+  int rcv = socket->Receive(pointMsg->GetPackBodyPointer(), pointMsg->GetPackBodySize());
+  
+  // Deserialize the transform data
+  // If you want to skip CRC check, call Unpack() without argument.
+  int c = pointMsg->Unpack(1);
+  
+  if (c & igtl::MessageHeader::UNPACK_BODY) { // if CRC check is OK
+    // Check the device name in the OpenIGTLink header
+    if (strcmp(pointMsg->GetDeviceName(), "F") == 0){
+      int nOfPointElement = pointMsg->GetNumberOfPointElement();
+      std::cerr << "number of point element: " << nOfPointElement << std::endl;
+      // get the point element
+      for (int i = 0; i < nOfPointElement; i++)
+	{
+	  igtl::PointElement::Pointer pointElement;
+	  pointMsg->GetPointElement(i, pointElement);
+	
+	  igtlUint8 rgba[4];
+	  pointElement->GetRGBA(rgba);
+
+	  igtlFloat32 pos[3];
+	  pointElement->GetPosition(pos);
+	  
+	  std::cerr << "Name: " << pointElement->GetName() << std::endl;
+          std::cerr << " Position  : ( " << std::fixed << pos[0] << ", " << pos[1] << ", " << pos[2] << " )" << std::endl;
+	}
+      fTarget = true;
+    }
+  }
+  return 1;
+}
+//-------------------------------------------------- end july11,ez
 
 
 //-------------------------------------------------- july6,ez
@@ -296,6 +342,7 @@ int MrsvrMessageServer::feedBackInfo()
 	feedMsg->SetTimeStamp(ts);
 	feedMsg->Pack();  
 	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+	std::cerr << "feedZFrame" << std::endl;
 	fZFrameTransform = false;
       }
 
@@ -311,6 +358,7 @@ int MrsvrMessageServer::feedBackInfo()
 	feedMsg->SetTimeStamp(ts);
 	feedMsg->Pack();  
 	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+	std::cerr << "feedTarget" << std::endl;
 	fTarget = false;	
       }
   } 

@@ -62,6 +62,8 @@
 #include "igtlServerSocket.h"
 #include "igtlSocket.h"
 
+#include "igtlPointMessage.h"
+
 /*
 #include "MrsvrLogicalPosition.h"
 #include "MrsvrPhysicalPosition.h"
@@ -116,6 +118,12 @@ class MrsvrMessageServer : public MrsvrThread {
 
   //unsigned char      rcvBuf[MESSAGE_BUFFER_SIZE];
   int                onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::MessageHeader::Pointer& header);
+
+//-------------------- july9,ez
+  int                onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::MessageHeader::Pointer& header);
+//-------------------- end july9, ez
+
+
 
   bool               fSetTargetMatrix;
   bool               fSetCalibrationMatrix;
