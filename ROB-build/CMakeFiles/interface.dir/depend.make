@@ -41,6 +41,7 @@ CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/ig
 CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSimpleFastMutexLock.h
 CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSmartPointer.h
 CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSocket.h
+CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlStringMessage.h
 CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTimeStamp.h
 CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTransformMessage.h
 CMakeFiles/interface.dir/interface.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTypes.h

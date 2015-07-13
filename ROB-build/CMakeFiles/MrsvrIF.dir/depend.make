@@ -42,6 +42,7 @@ CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Sourc
 CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSimpleFastMutexLock.h
 CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSmartPointer.h
 CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSocket.h
+CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlStringMessage.h
 CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTimeStamp.h
 CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTransformMessage.h
 CMakeFiles/MrsvrIF.dir/MrsvrMainWindow.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTypes.h
@@ -277,6 +278,7 @@ CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/So
 CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSimpleFastMutexLock.h
 CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSmartPointer.h
 CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlSocket.h
+CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlStringMessage.h
 CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTimeStamp.h
 CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTransformMessage.h
 CMakeFiles/MrsvrIF.dir/MrsvrMessageServer.o: /home/yuting/Desktop/OpenIGTLink/Source/igtlTypes.h

@@ -61,7 +61,7 @@ class HelloRobotWidget:
     self.lineEditPort = qt.QLineEdit()
     labelStatus = qt.QLabel("Status: ")
     self.lineEditStatus = qt.QLineEdit()
-    self.lineEditStatus.setText("pending... + registration time")
+    #self.lineEditStatus.setText("pending... + registration time")
 
     gridLayout.addWidget(labelHostname, 1, 0)
     gridLayout.addWidget(self.lineEditHostname, 1, 1)
@@ -82,20 +82,27 @@ class HelloRobotWidget:
     controllerFormLayout = qt.QFormLayout(controllerFormFrame)
     mainLayout.addWidget(controllerFormFrame)
    
-    buttonConnect = qt.QPushButton("Connect")
-    buttonConnect.toolTip = "Print 'Hello world' in standard output."
-    buttonRegistration = qt.QPushButton("ZFrameTransform Registration")
+    self.buttonConnect = qt.QPushButton("Connect")
+    self.buttonConnect.toolTip = "Print 'Hello world' in standard output."
+    self.buttonRegistration = qt.QPushButton("ZFrameTransform Registration")
+    #self.buttonRegistration.setEnabled(False)
     #buttonTarget = qt.QPushButton("find Target")
-    buttonSendTarget = qt.QPushButton("send Target")
-    buttonCurrent = qt.QPushButton("Current")
-    buttonDisconnect = qt.QPushButton("Disconnect")
+    self.buttonSendTarget = qt.QPushButton("send Target")
+    self.buttonSendTarget.setEnabled(False)
+    self.buttonCurrent = qt.QPushButton("Current")
+    self.buttonCurrent.setEnabled(False)
+    self.buttonDisconnect = qt.QPushButton("Disconnect")
+    self.buttonDisconnect.setEnabled(False)
+    self.buttonReconnect = qt.QPushButton("Reconnect")
+    self.buttonReconnect.setEnabled(False)
 
-    controllerFormLayout.addWidget(buttonConnect)
-    controllerFormLayout.addWidget(buttonRegistration)
+    controllerFormLayout.addWidget(self.buttonConnect)
+    controllerFormLayout.addWidget(self.buttonRegistration)
     #controllerFormLayout.addWidget(buttonTarget)
-    controllerFormLayout.addWidget(buttonSendTarget)
-    controllerFormLayout.addWidget(buttonCurrent)
-    controllerFormLayout.addWidget(buttonDisconnect)
+    controllerFormLayout.addWidget(self.buttonSendTarget)
+    controllerFormLayout.addWidget(self.buttonCurrent)
+    controllerFormLayout.addWidget(self.buttonDisconnect)
+    controllerFormLayout.addWidget(self.buttonReconnect)
 
     #
     # input markup fiducial node
@@ -132,12 +139,13 @@ class HelloRobotWidget:
 
     
     # connect of the buttons
-    buttonConnect.connect('clicked(bool)', self.onButtonConnectClicked)
-    buttonRegistration.connect('clicked(bool)', self.onButtonRegistrationClicked)
+    self.buttonConnect.connect('clicked(bool)', self.onButtonConnectClicked)
+    self.buttonRegistration.connect('clicked(bool)', self.onButtonRegistrationClicked)
     #buttonTarget.connect('clicked(bool)', self.onButtonTargetClicked)
-    buttonSendTarget.connect('clicked(bool)', self.onButtonSendTargetClicked)
-    buttonCurrent.connect('clicked(bool)', self.onButtonCurrentClicked)
-    buttonDisconnect.connect('clicked(bool)', self.onButtonDisconnectClicked)
+    self.buttonSendTarget.connect('clicked(bool)', self.onButtonSendTargetClicked)
+    self.buttonCurrent.connect('clicked(bool)', self.onButtonCurrentClicked)
+    self.buttonDisconnect.connect('clicked(bool)', self.onButtonDisconnectClicked)
+    self.buttonReconnect.connect('clicked(bool)', self.onButtonReconnectClicked)
 
     #########################
 
@@ -148,19 +156,30 @@ class HelloRobotWidget:
     #self.buttonConnect = buttonConnect
 
   def onButtonConnectClicked(self):
-    self.strHostname = str(self.lineEditHostname.text)
-    self.intPort = int(self.lineEditPort.text)
-    self.buttonConnect(self.strHostname, self.intPort)
-    self.activeEvent()  # active the monitor
-
-  def buttonConnect(self, strHostname, intPort):
     self.connectNode = slicer.vtkMRMLIGTLConnectorNode()
     self.connectNode.SetName('testConnectNode')
     slicer.mrmlScene.AddNode(self.connectNode)
 
-    self.connectNode.SetTypeClient(strHostname, intPort)
-    self.connectNode.Start()  # connect
+    #self.strHostname = str(self.lineEditHostname.text)
+    #self.intPort = int(self.lineEditPort.text)
+    lenHost = len(self.lineEditHostname.text)
+    lenPort = len(self.lineEditPort.text)
+    print "len"
+    print lenHost
+    print lenPort
+    # check the input
+    if lenHost == 0 or lenPort == 0:
+      qt.QMessageBox.information(
+        slicer.util.mainWindow(),
+        "Slicer Python", "Hostname/Port invalid!")
+    else:
+      self.strHostname = str(self.lineEditHostname.text)
+      self.intPort = int(self.lineEditPort.text)
+      self.connectNode.SetTypeClient(self.strHostname, self.intPort)
+      self.connectNode.Start()  # connect
 
+    self.activeEvent()  # active the monitor
+    self.buttonDisconnect.setEnabled(True)
     
   def onButtonRegistrationClicked(self):
     self.dataNodeZFrame = slicer.vtkMRMLLinearTransformNode()
@@ -182,38 +201,24 @@ class HelloRobotWidget:
 
 
   def onButtonSendTargetClicked(self):
-    self.buttonSendTarget()
-
-  def buttonSendTarget(self):
     '''check whether dataNodeTarget exist'''
-#-------------------- july9, ez!!!!!!!!!!!!!!!!!!!!!!!
-    # no choice, send the 1st one fnode
     self.currentTargetNode = self.targetFiducialsSelector.currentNode()
     self.connectNode.RegisterOutgoingMRMLNode(self.currentTargetNode)
     self.connectNode.PushNode(self.currentTargetNode)
 
-    #self.connectNode.RegisterOutgoingMRMLNode(self.dataNodeTarget)
-    #self.connectNode.PushNode(self.dataNodeTarget)  # send the Target data to controller
-
-#-------------------- end july9, ez
-
   def onButtonCurrentClicked(self):
-    self.buttonCurrent()
-
-  def buttonCurrent(self):
     self.dataNodeCurrent = slicer.vtkMRMLLinearTransformNode()
     self.dataNodeCurrent.SetName('CURRENT22222')
     slicer.mrmlScene.AddNode(self.dataNodeCurrent)
 
 
   def onButtonDisconnectClicked(self):
-    self.buttonDisconnect()  
-
-  def buttonDisconnect(self):
     self.connectNode.Stop()
+    self.buttonReconnect.setEnabled(True)
     '''unregister'''
-
-
+    
+  def onButtonReconnectClicked(self):
+    pass  # add function
 
   def activeEvent(self):
     print "into activeEvent"
@@ -236,9 +241,6 @@ class HelloRobotWidget:
     print ("into caller", self.times1)
 
     if caller.IsA('vtkMRMLIGTLConnectorNode'):
-      print "temp"
-      print event
-
       #print "caller is connectNode!"
       nInNode =  caller.GetNumberOfIncomingMRMLNodes()
       #print nInNode
@@ -248,21 +250,32 @@ class HelloRobotWidget:
         if node.IsA("vtkMRMLLinearTransformNode"):
           if node.GetName() == "feedStatus":
             pass
+
           elif node.GetName() == "feedZFrame":
             qt.QMessageBox.information(
               slicer.util.mainWindow(),
               "Slicer Python", "Registration Accepted!")
             self.connectNode.UnregisterIncomingMRMLNode(self.dataNodeZFrame)
             self.connectNode.UnregisterIncomingMRMLNode(node)
+            self.buttonSendTarget.setEnabled(True)
             
           elif node.GetName() == "feedTarget":
             qt.QMessageBox.information(
               slicer.util.mainWindow(),
               "Slicer Python", "Target Accepted!")
             self.connectNode.UnregisterIncomingMRMLNode(node)
-          else:
-            print "no feed!!!!!"
-            
+            self.buttonCurrent.setEnabled(True)
+        
+        elif node.IsA("vtkMRMLTextNode"):
+          if node.GetName() == "feedInfoRegistTime":
+            print node.GetText()
+            self.lineEditStatus.setText(node.GetText())
+            #self.connectNode.UnregisterIncomingMRMLNode(node)
+            self.buttonSendTarget.setEnabled(True)
+          
+
+        else:  # else to node.IsA
+          print "no feed!!!!!"
           
         #print i  # start from 0
         #print node.GetID()  # MRML ID
@@ -271,6 +284,8 @@ class HelloRobotWidget:
         #print node.GetName()
         #print node.IsA('vtkMRMLLinearTransformNode')  # True
         #print "!!!!!!!!!!!!!!!!!!!"
+
+
 
   def onFiducialsSelected(self):
     # Remove observer if previous node exists
@@ -340,13 +355,12 @@ class HelloRobotWidget:
 #
 # HelloRobotLogic
 #
-
+#-------------------------------------------------------------------
 class HelloRobotLogic:
   def __init__(self):
     self.pathVectors = []
     self.pathOrigins = []
 
-#-------------------------------------------------------------------
   def computeNearestPath(self, pos):
     p = numpy.array(pos)
 

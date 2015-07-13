@@ -42,6 +42,7 @@ CMakeFiles/interface.dir/interface.o
  /home/yuting/Desktop/OpenIGTLink/Source/igtlSimpleFastMutexLock.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlSmartPointer.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlSocket.h
+ /home/yuting/Desktop/OpenIGTLink/Source/igtlStringMessage.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlTimeStamp.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlTransformMessage.h
  /home/yuting/Desktop/OpenIGTLink/Source/igtlTypes.h

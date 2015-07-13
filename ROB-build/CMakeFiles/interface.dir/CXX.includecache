@@ -81,6 +81,8 @@ igtlSocket.h
 /home/yuting/Desktop/MTest/ROB/igtlSocket.h
 igtlPointMessage.h
 /home/yuting/Desktop/MTest/ROB/igtlPointMessage.h
+igtlStringMessage.h
+/home/yuting/Desktop/MTest/ROB/igtlStringMessage.h
 MrsvrLogicalPosition.h
 /home/yuting/Desktop/MTest/ROB/MrsvrLogicalPosition.h
 MrsvrPhysicalPosition.h
@@ -489,6 +491,18 @@ igtlWin32Header.h
 /home/yuting/Desktop/OpenIGTLink/Source/igtlWin32Header.h
 sys/time.h
 -
+
+/home/yuting/Desktop/OpenIGTLink/Source/igtlStringMessage.h
+string
+-
+igtlObject.h
+/home/yuting/Desktop/OpenIGTLink/Source/igtlObject.h
+igtlMath.h
+/home/yuting/Desktop/OpenIGTLink/Source/igtlMath.h
+igtlMessageBase.h
+/home/yuting/Desktop/OpenIGTLink/Source/igtlMessageBase.h
+igtlTypes.h
+/home/yuting/Desktop/OpenIGTLink/Source/igtlTypes.h
 
 /home/yuting/Desktop/OpenIGTLink/Source/igtlTimeStamp.h
 igtlMacro.h

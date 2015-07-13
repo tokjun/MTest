@@ -187,7 +187,6 @@ MrsvrMainWindow::MrsvrMainWindow(FXApp* app, int w, int h)
   robotStatus = NULL;
   robotCommand = NULL; 
   robotLog = NULL;
-  extMsgSvr = NULL;
   transform = NULL;
 
   infoCanvas = NULL;
@@ -1697,6 +1696,11 @@ void MrsvrMainWindow::updateExternalCommands()
       strcpy(infoRegistTime, infoTime);
       fUpdateInfoRegistTime = 1;
       infoRegistTimeWarning = false;
+     
+      if (fUpdateInfoRegistTime == 1) {
+	extMsgSvr->feedBackInfoRegist(infoRegistTime);
+      }
+
     }
   }
 }

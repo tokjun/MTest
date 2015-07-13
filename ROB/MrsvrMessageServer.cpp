@@ -326,41 +326,65 @@ int MrsvrMessageServer::onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::Messa
 
 
 //-------------------------------------------------- july6,ez
+int MrsvrMessageServer::feedBackInfoRegist(char* infoRegistTime){
+  std::cerr << "registtime: " << infoRegistTime << std::endl;
+  igtl::StringMessage::Pointer feedRegistTimeMsg;
+  feedRegistTimeMsg = igtl::StringMessage::New();
+  feedRegistTimeMsg->SetDeviceName("feedInfoRegistTime");
+  feedRegistTimeMsg->SetString(infoRegistTime);
+  std::cerr << "infoRegisttime: " << feedRegistTimeMsg->SetString(infoRegistTime) << std::endl;
+  feedRegistTimeMsg->Pack();
+  socket->Send(feedRegistTimeMsg->GetPackPointer(), feedRegistTimeMsg->GetPackSize());
+}
+
 int MrsvrMessageServer::feedBackInfo()
 {
   // check connect
   if (this->connectionStatus == SVR_CONNECTED) {
-      if (fZFrameTransform == true){  // feedback ZFrame
-        igtl::TransformMessage::Pointer feedMsg;
-        feedMsg = igtl::TransformMessage::New();
-        igtl::TimeStamp::Pointer ts;
-        ts = igtl::TimeStamp::New();
-        igtl::Matrix4x4 rcv;
-        GetRandomMatrix(rcv);
-       	feedMsg->SetDeviceName("feedZFrame");    
-	feedMsg->SetMatrix(rcv);
-	feedMsg->SetTimeStamp(ts);
-	feedMsg->Pack();  
-	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
-	std::cerr << "feedZFrame" << std::endl;
-	fZFrameTransform = false;
-      }
 
-      else if (fTarget == true) {  // feedback Target
-	igtl::TransformMessage::Pointer feedMsg;
-        feedMsg = igtl::TransformMessage::New();
-        igtl::TimeStamp::Pointer ts;
-        ts = igtl::TimeStamp::New();
-        igtl::Matrix4x4 rcv;
-        GetRandomMatrix(rcv);
-       	feedMsg->SetDeviceName("feedTarget");    
-	feedMsg->SetMatrix(rcv);
-	feedMsg->SetTimeStamp(ts);
-	feedMsg->Pack();  
-	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
-	std::cerr << "feedTarget" << std::endl;
-	fTarget = false;	
-      }
+//      if (fZFrameTransform == true){  // feedback ZFrame
+//        igtl::TransformMessage::Pointer feedMsg;
+//        feedMsg = igtl::TransformMessage::New();
+//        igtl::TimeStamp::Pointer ts;
+//        ts = igtl::TimeStamp::New();
+//        igtl::Matrix4x4 rcv;
+//        GetRandomMatrix(rcv);
+//       	feedMsg->SetDeviceName("feedZFrame");    
+//	feedMsg->SetMatrix(rcv);
+//	feedMsg->SetTimeStamp(ts);
+//	feedMsg->Pack();  
+//	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+//	std::cerr << "feedZFrame" << std::endl;
+//	fZFrameTransform = false;
+//      }
+//
+
+    if (fZFrameTransform == true){
+      igtl::StringMessage::Pointer feedMsg;
+      feedMsg = igtl::StringMessage::New();
+      feedMsg->SetDeviceName("feedZFrame");
+      feedMsg->SetString("receive ZFrame message!!!!!");
+      feedMsg->Pack();
+      socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+      std::cerr << "feedZFrame" << std::endl;
+      fZFrameTransform = false;
+    }
+
+    else if (fTarget == true) {  // feedback Target
+      igtl::TransformMessage::Pointer feedMsg;
+      feedMsg = igtl::TransformMessage::New();
+      igtl::TimeStamp::Pointer ts;
+      ts = igtl::TimeStamp::New();
+      igtl::Matrix4x4 rcv;
+      GetRandomMatrix(rcv);
+      feedMsg->SetDeviceName("feedTarget");    
+      feedMsg->SetMatrix(rcv);
+      feedMsg->SetTimeStamp(ts);
+      feedMsg->Pack();  
+      socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+      std::cerr << "feedTarget" << std::endl;
+      fTarget = false;	
+    }
   } 
   else if (this->connectionStatus == SVR_WAIT) {
     

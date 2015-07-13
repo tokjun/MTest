@@ -63,6 +63,7 @@
 #include "igtlSocket.h"
 
 #include "igtlPointMessage.h"
+#include "igtlStringMessage.h"
 
 /*
 #include "MrsvrLogicalPosition.h"
@@ -156,6 +157,7 @@ class MrsvrMessageServer : public MrsvrThread {
 
 
 //-------------------------------------------------------------------- july6,ez
+  int         feedBackInfoRegist(char infoRegistTime);
   int         feedBackInfo();
   bool        fZFrameTransform;
   bool        fTarget;
