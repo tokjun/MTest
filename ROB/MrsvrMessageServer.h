@@ -157,10 +157,12 @@ class MrsvrMessageServer : public MrsvrThread {
 
 
 //-------------------------------------------------------------------- july6,ez
-  int         feedBackInfoRegist(char infoRegistTime);
+  //void        feedBackStatus(int status);
+  int         feedBackInfoRegist(char* infoRegistTime);
   int         feedBackInfo();
   bool        fZFrameTransform;
   bool        fTarget;
+  bool        fConnect;
 //-------------------------------------------------------------------- end july6,ez
 
  private:

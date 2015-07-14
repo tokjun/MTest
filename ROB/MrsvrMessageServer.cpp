@@ -112,6 +112,7 @@ void MrsvrMessageServer::init()
   //-------------------------------------------------- july6,ez
   fZFrameTransform = false;
   fTarget = false;
+  fConnect = false;
   //-------------------------------------------------- end july6,ez
 
 
@@ -326,6 +327,27 @@ int MrsvrMessageServer::onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::Messa
 
 
 //-------------------------------------------------- july6,ez
+//void MrsvrMessageServer::feedBackStatus(int status){
+//  std::cerr << "feedStatus:  " << status << std::endl;
+//  igtl::StringMessage::Pointer feedStatusMsg;
+//  feedStatusMsg = igtl::StringMessage::New();
+//  feedStatusMsg->SetDeviceName("feedStatus");
+//
+//  if (status == 0) {
+//    feedStatusMsg->SetString("wait");
+//  }
+//  else if (status == 1) {
+//    feedStatusMsg->SetString("connect");
+//  }
+//  else if (status == 2) {
+//    feedStatusMsg->SetString("else");
+//  } 
+//
+//  feedStatusMsg->Pack();
+//  socket->Send(feedStatusMsg->GetPackPointer(), feedStatusMsg->GetPackSize());
+//}
+//
+
 int MrsvrMessageServer::feedBackInfoRegist(char* infoRegistTime){
   std::cerr << "registtime: " << infoRegistTime << std::endl;
   igtl::StringMessage::Pointer feedRegistTimeMsg;
@@ -341,23 +363,12 @@ int MrsvrMessageServer::feedBackInfo()
 {
   // check connect
   if (this->connectionStatus == SVR_CONNECTED) {
-
-//      if (fZFrameTransform == true){  // feedback ZFrame
-//        igtl::TransformMessage::Pointer feedMsg;
-//        feedMsg = igtl::TransformMessage::New();
-//        igtl::TimeStamp::Pointer ts;
-//        ts = igtl::TimeStamp::New();
-//        igtl::Matrix4x4 rcv;
-//        GetRandomMatrix(rcv);
-//       	feedMsg->SetDeviceName("feedZFrame");    
-//	feedMsg->SetMatrix(rcv);
-//	feedMsg->SetTimeStamp(ts);
-//	feedMsg->Pack();  
-//	socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
-//	std::cerr << "feedZFrame" << std::endl;
-//	fZFrameTransform = false;
-//      }
-//
+    igtl::StringMessage::Pointer feedStatusMsg;
+    feedStatusMsg = igtl::StringMessage::New();
+    feedStatusMsg->SetDeviceName("feedStatus");
+    feedStatusMsg->SetString("Connect");
+    feedStatusMsg->Pack();
+    socket->Send(feedStatusMsg->GetPackPointer(), feedStatusMsg->GetPackSize());
 
     if (fZFrameTransform == true){
       igtl::StringMessage::Pointer feedMsg;
@@ -387,7 +398,6 @@ int MrsvrMessageServer::feedBackInfo()
     }
   } 
   else if (this->connectionStatus == SVR_WAIT) {
-    
   }  //end "this" if
 
 }

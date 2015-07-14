@@ -49,7 +49,7 @@ class HelloRobotWidget:
 
     # Collapsible button - Settings
     setCollapsibleButton = ctk.ctkCollapsibleButton()
-    setCollapsibleButton.text = "Settings"
+    setCollapsibleButton.text = "Settings and Status"
     self.layout.addWidget(setCollapsibleButton)
 
     gridLayout = qt.QGridLayout(setCollapsibleButton)
@@ -61,14 +61,18 @@ class HelloRobotWidget:
     self.lineEditPort = qt.QLineEdit()
     labelStatus = qt.QLabel("Status: ")
     self.lineEditStatus = qt.QLineEdit()
+    labelRegistTime = qt.QLabel("Regist Time: ")
+    self.lineEditRegistTime = qt.QLineEdit()
     #self.lineEditStatus.setText("pending... + registration time")
 
     gridLayout.addWidget(labelHostname, 1, 0)
     gridLayout.addWidget(self.lineEditHostname, 1, 1)
-    gridLayout.addWidget(labelPort, 2, 0)
-    gridLayout.addWidget(self.lineEditPort, 2, 1)
-    gridLayout.addWidget(labelStatus, 3, 0)
-    gridLayout.addWidget(self.lineEditStatus, 3, 1)
+    gridLayout.addWidget(labelPort, 1, 2)
+    gridLayout.addWidget(self.lineEditPort, 1, 3)
+    gridLayout.addWidget(labelStatus, 2, 0)
+    gridLayout.addWidget(self.lineEditStatus, 2, 1)
+    gridLayout.addWidget(labelRegistTime, 2, 2)
+    gridLayout.addWidget(self.lineEditRegistTime, 2, 3)
 
     # Collapsible button - Controller
     controlCollapsibleButton = ctk.ctkCollapsibleButton()
@@ -85,9 +89,7 @@ class HelloRobotWidget:
     self.buttonConnect = qt.QPushButton("Connect")
     self.buttonConnect.toolTip = "Print 'Hello world' in standard output."
     self.buttonRegistration = qt.QPushButton("ZFrameTransform Registration")
-    #self.buttonRegistration.setEnabled(False)
-    #buttonTarget = qt.QPushButton("find Target")
-    self.buttonSendTarget = qt.QPushButton("send Target")
+    self.buttonSendTarget = qt.QPushButton("Send Target")
     self.buttonSendTarget.setEnabled(False)
     self.buttonCurrent = qt.QPushButton("Current")
     self.buttonCurrent.setEnabled(False)
@@ -98,11 +100,10 @@ class HelloRobotWidget:
 
     controllerFormLayout.addWidget(self.buttonConnect)
     controllerFormLayout.addWidget(self.buttonRegistration)
-    #controllerFormLayout.addWidget(buttonTarget)
     controllerFormLayout.addWidget(self.buttonSendTarget)
     controllerFormLayout.addWidget(self.buttonCurrent)
     controllerFormLayout.addWidget(self.buttonDisconnect)
-    controllerFormLayout.addWidget(self.buttonReconnect)
+    #controllerFormLayout.addWidget(self.buttonReconnect)
 
     #
     # input markup fiducial node
@@ -152,21 +153,13 @@ class HelloRobotWidget:
     # Add vertical spacer
     self.layout.addStretch(1)
 
-    # Set local var as instance attribute
-    #self.buttonConnect = buttonConnect
-
   def onButtonConnectClicked(self):
     self.connectNode = slicer.vtkMRMLIGTLConnectorNode()
     self.connectNode.SetName('testConnectNode')
     slicer.mrmlScene.AddNode(self.connectNode)
 
-    #self.strHostname = str(self.lineEditHostname.text)
-    #self.intPort = int(self.lineEditPort.text)
     lenHost = len(self.lineEditHostname.text)
     lenPort = len(self.lineEditPort.text)
-    print "len"
-    print lenHost
-    print lenPort
     # check the input
     if lenHost == 0 or lenPort == 0:
       qt.QMessageBox.information(
@@ -214,6 +207,7 @@ class HelloRobotWidget:
 
   def onButtonDisconnectClicked(self):
     self.connectNode.Stop()
+    self.lineEditStatus.setText("disconnect")
     self.buttonReconnect.setEnabled(True)
     '''unregister'''
     
@@ -226,11 +220,11 @@ class HelloRobotWidget:
     self.tempLinearNode.SetName('temp')
    
     #self.tagTemp = self.tempLinearNode.AddObserver('ModifiedEvent', self.putInfo)
-    self.tagTemp = self.connectNode.AddObserver('ModifiedEvent', self.putInfo)
+    #self.tagTemp = self.connectNode.AddObserver('ModifiedEvent', self.putInfo)
     #self.tagTemp = self.connectNode.AddObserver(slicer.vtkMRMLIGTLConnectorNode.ReceiveEvent, self.putInfo)
     #self.tagTemp = self.tempLinearNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.putInfo)
     #self.tagTemp = self.tempLinearNode.AddObserver(self.connectNode.ReceiveEvent, self.putInfo)
-    #self.tagTemp = self.connectNode.AddObserver(self.connectNode.ReceiveEvent, self.putInfo)
+    self.tagTemp = self.connectNode.AddObserver(self.connectNode.ReceiveEvent, self.putInfo)
     
     #test
     self.times1 = 0
@@ -247,32 +241,26 @@ class HelloRobotWidget:
       for i in range(nInNode):  # start from 0
         node = caller.GetIncomingMRMLNode(i) 
 
-        if node.IsA("vtkMRMLLinearTransformNode"):
-          if node.GetName() == "feedStatus":
-            pass
-
-          elif node.GetName() == "feedZFrame":
-            qt.QMessageBox.information(
-              slicer.util.mainWindow(),
-              "Slicer Python", "Registration Accepted!")
-            self.connectNode.UnregisterIncomingMRMLNode(self.dataNodeZFrame)
-            self.connectNode.UnregisterIncomingMRMLNode(node)
-            self.buttonSendTarget.setEnabled(True)
-            
-          elif node.GetName() == "feedTarget":
+        if node.IsA("vtkMRMLLinearTransformNode"):              
+          if node.GetName() == "feedTarget":
             qt.QMessageBox.information(
               slicer.util.mainWindow(),
               "Slicer Python", "Target Accepted!")
             self.connectNode.UnregisterIncomingMRMLNode(node)
             self.buttonCurrent.setEnabled(True)
         
-        elif node.IsA("vtkMRMLTextNode"):
-          if node.GetName() == "feedInfoRegistTime":
-            print node.GetText()
+        elif node.IsA("vtkMRMLTextNode"):  # text node
+          if node.GetName() == "feedStatus":
             self.lineEditStatus.setText(node.GetText())
-            #self.connectNode.UnregisterIncomingMRMLNode(node)
+            self.connectNode.UnregisterIncomingMRMLNode(node)
+
+          elif node.GetName() == "feedInfoRegistTime":
+            self.lineEditRegistTime.setText(node.GetText())
+            qt.QMessageBox.information(
+              slicer.util.mainWindow(),
+              "Slicer Python", "Registration Accepted!")
+            self.connectNode.UnregisterIncomingMRMLNode(node)
             self.buttonSendTarget.setEnabled(True)
-          
 
         else:  # else to node.IsA
           print "no feed!!!!!"

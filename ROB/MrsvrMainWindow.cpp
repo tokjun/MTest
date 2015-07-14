@@ -1717,14 +1717,17 @@ void MrsvrMainWindow::updateFeedBackInfo()
     {  // Message Server
       if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_CONNECTED) {
 	std::cerr << "connect: "<< cTimes++ << std::endl;
+	//extMsgSvr->feedBackStatus(1);
 	extMsgSvr->feedBackInfo();
       }
       else if (extMsgSvr->getSvrStatus() == MrsvrMessageServer::SVR_WAIT) {
 	std::cerr << "wait: " << wTimes++ << std::endl;
+	//extMsgSvr->feedBackStatus(0);
 	extMsgSvr->feedBackInfo();
       }
       else {
 	std::cerr << "else: " << eTimes++ << std::endl;
+	//extMsgSvr->feedBackStatus(2);
       }
     }
 }
