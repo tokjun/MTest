@@ -237,7 +237,7 @@ class HelloRobotWidget:
             self.buttonSendTarget.setEnabled(True)
 
           elif node.GetName() == "feedTarget":
-            print node.GetText()
+			print node.GetText()
             qt.QMessageBox.information(
               slicer.util.mainWindow(),
               "Slicer Python", "Target Accepted!")

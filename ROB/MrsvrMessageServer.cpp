@@ -76,12 +76,9 @@ void GetRandomMatrix(igtl::Matrix4x4& matrix){
   igtl::PrintMatrix(matrix);
 }
 
-
-
 void printTargetMatrix(igtl::Matrix4x4& matrix){
   igtl::PrintMatrix(matrix);
 }
-
 //-------------------------------------------------- end july6,ez
 
 MrsvrMessageServer::MrsvrMessageServer(int port) : MrsvrThread()
@@ -112,9 +109,7 @@ void MrsvrMessageServer::init()
   //-------------------------------------------------- july6,ez
   fZFrameTransform = false;
   fTarget = false;
-  fConnect = false;
   //-------------------------------------------------- end july6,ez
-
 
   this->connectionStatus =  SVR_STOP;
   this->fRunServer = 1;
@@ -206,7 +201,6 @@ void MrsvrMessageServer::process()
     }
   }
   this->connectionStatus = SVR_STOP;
-
 }
 
 
@@ -227,7 +221,6 @@ void MrsvrMessageServer::stop()
     }
   }
   */
-
   init();
 }
 
@@ -259,8 +252,8 @@ int MrsvrMessageServer::onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::Mess
     // Check the device name in the OpenIGTLink header
     if (strcmp(transMsg->GetDeviceName(), "TARGET") == 0 ||
         strcmp(transMsg->GetDeviceName(), "ProstateNavRobotTarg") == 0){
-      setTargetMatrix(matrix);
-      
+
+      setTargetMatrix(matrix);      
       printTargetMatrix(matrix);
       
       //if (result == TARGET_ACCEPTED) {
@@ -268,6 +261,7 @@ int MrsvrMessageServer::onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::Mess
       //}
 
     } else if (strcmp(transMsg->GetDeviceName(), "ZFrameTransform") == 0){
+      
       setCalibrationMatrix(matrix);
       //-------------------------------------------------- july6,ez
       fZFrameTransform = true;
@@ -279,6 +273,7 @@ int MrsvrMessageServer::onRcvMsgMaster(igtl::Socket::Pointer& socket, igtl::Mess
   
   return 0;
 }
+
 
 //-------------------------------------------------- july11,ez
 int MrsvrMessageServer::onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::MessageHeader::Pointer& header)
@@ -327,37 +322,16 @@ int MrsvrMessageServer::onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::Messa
 
 
 //-------------------------------------------------- july6,ez
-//void MrsvrMessageServer::feedBackStatus(int status){
-//  std::cerr << "feedStatus:  " << status << std::endl;
-//  igtl::StringMessage::Pointer feedStatusMsg;
-//  feedStatusMsg = igtl::StringMessage::New();
-//  feedStatusMsg->SetDeviceName("feedStatus");
-//
-//  if (status == 0) {
-//    feedStatusMsg->SetString("wait");
-//  }
-//  else if (status == 1) {
-//    feedStatusMsg->SetString("connect");
-//  }
-//  else if (status == 2) {
-//    feedStatusMsg->SetString("else");
-//  } 
-//
-//  feedStatusMsg->Pack();
-//  socket->Send(feedStatusMsg->GetPackPointer(), feedStatusMsg->GetPackSize());
-//}
-//
-
 int MrsvrMessageServer::feedBackInfoRegist(char* infoRegistTime){
   std::cerr << "registtime: " << infoRegistTime << std::endl;
   igtl::StringMessage::Pointer feedRegistTimeMsg;
   feedRegistTimeMsg = igtl::StringMessage::New();
   feedRegistTimeMsg->SetDeviceName("feedInfoRegistTime");
   feedRegistTimeMsg->SetString(infoRegistTime);
-  std::cerr << "infoRegisttime: " << feedRegistTimeMsg->SetString(infoRegistTime) << std::endl;
   feedRegistTimeMsg->Pack();
   socket->Send(feedRegistTimeMsg->GetPackPointer(), feedRegistTimeMsg->GetPackSize());
 }
+
 
 int MrsvrMessageServer::feedBackInfo()
 {
@@ -382,19 +356,29 @@ int MrsvrMessageServer::feedBackInfo()
     }
 
     else if (fTarget == true) {  // feedback Target
-      igtl::TransformMessage::Pointer feedMsg;
-      feedMsg = igtl::TransformMessage::New();
-      igtl::TimeStamp::Pointer ts;
-      ts = igtl::TimeStamp::New();
-      igtl::Matrix4x4 rcv;
-      GetRandomMatrix(rcv);
-      feedMsg->SetDeviceName("feedTarget");    
-      feedMsg->SetMatrix(rcv);
-      feedMsg->SetTimeStamp(ts);
-      feedMsg->Pack();  
+      igtl::StringMessage::Pointer feedMsg;
+      feedMsg = igtl::StringMessage::New();
+      feedMsg->SetDeviceName("feedTarget");
+      feedMsg->SetString("receive Target message!!!!!");
+      feedMsg->Pack();
       socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
       std::cerr << "feedTarget" << std::endl;
-      fTarget = false;	
+      fTarget = false;
+
+//      igtl::TransformMessage::Pointer feedMsg;
+//      feedMsg = igtl::TransformMessage::New();
+//      igtl::TimeStamp::Pointer ts;
+//      ts = igtl::TimeStamp::New();
+//      igtl::Matrix4x4 rcv;
+//      GetRandomMatrix(rcv);
+//      feedMsg->SetDeviceName("feedTarget");    
+//      feedMsg->SetMatrix(rcv);
+//      feedMsg->SetTimeStamp(ts);
+//      feedMsg->Pack();  
+//      socket->Send(feedMsg->GetPackPointer(), feedMsg->GetPackSize());
+//      std::cerr << "feedTarget" << std::endl;
+//      fTarget = false;	
+//
     }
   } 
   else if (this->connectionStatus == SVR_WAIT) {
@@ -402,8 +386,6 @@ int MrsvrMessageServer::feedBackInfo()
 
 }
 //-------------------------------------------------- end july6,ez
-
-
 
 
 int MrsvrMessageServer::getSvrStatus()
@@ -468,6 +450,7 @@ bool MrsvrMessageServer::getMode(int* next)
   pthread_mutex_unlock(&mtxCommand);  
   return r;
 }
+
 
 int MrsvrMessageServer::sendCurrentPosition(igtl::Matrix4x4& current)
 {
