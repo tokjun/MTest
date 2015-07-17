@@ -311,7 +311,7 @@ int MrsvrMessageServer::onRcvPointMsg(igtl::Socket::Pointer& socket, igtl::Messa
 	  pointElement->GetPosition(pos);
 	  
 	  std::cerr << "Name: " << pointElement->GetName() << std::endl;
-          std::cerr << " Position  : ( " << std::fixed << pos[0] << ", " << pos[1] << ", " << pos[2] << " )" << std::endl;
+          std::cerr << " Position  : ( " << pos[0] << ", " << pos[1] << ", " << pos[2] << " )" << std::endl;
 	}
       fTarget = true;
     }
